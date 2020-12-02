@@ -70,7 +70,7 @@ Wang and Zongheng Yang.
 
 
 [WaveGlow]: https://drive.google.com/open?id=1rpK8CzAAirq9sWZhe9nlfvxMF1dRgFbF
-[Tacotron 2]: https://drive.google.com/file/d/1c5ZTuT7J08wLUoVZ2KkUs_VdZuJ86ZqA/view?usp=sharing
+[Tacotron 2]: https://drive.google.com/file/d/1mu7JHihfe98Syww1UsIWF1XOEoZ95IKQ/view?usp=sharing
 [pytorch 1.0]: https://github.com/pytorch/pytorch#installation
 [website]: https://nv-adlr.github.io/WaveGlow
 [ignored]: https://github.com/NVIDIA/tacotron2/blob/master/hparams.py#L22

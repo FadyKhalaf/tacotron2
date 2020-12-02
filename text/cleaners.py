@@ -88,3 +88,8 @@ def english_cleaners(text):
   text = expand_abbreviations(text)
   text = collapse_whitespace(text)
   return text
+
+def arabic_cleaners(text):
+  text = convert_to_ascii(text)  # not needed
+  text = collapse_whitespace(text)
+  return text

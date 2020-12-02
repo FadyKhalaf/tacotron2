@@ -2,6 +2,7 @@ import random
 import numpy as np
 import torch
 import torch.utils.data
+from arabic_pronounce import phonetise
 
 import layers
 from utils import load_wav_to_torch, load_filepaths_and_text
@@ -20,6 +21,8 @@ class TextMelLoader(torch.utils.data.Dataset):
         self.max_wav_value = hparams.max_wav_value
         self.sampling_rate = hparams.sampling_rate
         self.load_mel_from_disk = hparams.load_mel_from_disk
+        self.filter_length = hparams.filter_length
+        self.hop_length = hparams.hop_length
         self.stft = layers.TacotronSTFT(
             hparams.filter_length, hparams.hop_length, hparams.win_length,
             hparams.n_mel_channels, hparams.sampling_rate, hparams.mel_fmin,
@@ -36,7 +39,7 @@ class TextMelLoader(torch.utils.data.Dataset):
 
     def get_mel(self, filename):
         if not self.load_mel_from_disk:
-            audio, sampling_rate = load_wav_to_torch(filename)
+            audio, sampling_rate = load_wav_to_torch(filename, self.filter_length, self.hop_length)
             if sampling_rate != self.stft.sampling_rate:
                 raise ValueError("{} {} SR doesn't match target {} SR".format(
                     sampling_rate, self.stft.sampling_rate))
@@ -54,8 +57,24 @@ class TextMelLoader(torch.utils.data.Dataset):
         return melspec
 
     def get_text(self, text):
+        arr = []
+        for word in text.split(' '):
+            if word in [' ', '']:
+                pass
+            elif word in [',', '.', '-']:
+                x = word
+                arr.append(x)
+            else:
+                x = self._maybe_get_arpabet(word)
+                arr.append(x)
+        text = ' '.join(arr)
         text_norm = torch.IntTensor(text_to_sequence(text, self.text_cleaners))
         return text_norm
+
+    def _maybe_get_arpabet(self, word):
+        pronunciations = phonetise(word)
+        toBeReturned = '{%s}' % pronunciations[0] if len(pronunciations)==1 else '{%s}' % pronunciations[1]
+        return toBeReturned
 
     def __getitem__(self, index):
         return self.get_mel_text_pair(self.audiopaths_and_text[index])

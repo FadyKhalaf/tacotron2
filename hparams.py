@@ -24,15 +24,14 @@ def create_hparams(hparams_string=None, verbose=False):
         ################################
         # Data Parameters             #
         ################################
-        load_mel_from_disk=False,
-        training_files='filelists/ljs_audio_text_train_filelist.txt',
-        validation_files='filelists/ljs_audio_text_val_filelist.txt',
-        text_cleaners=['english_cleaners'],
-
+        load_mel_from_disk=True,
+	training_files='filelists/arabic_audio_text_train_filelist_mel.txt',
+        validation_files='filelists/arabic_audio_text_val_filelist_mel.txt',
+        text_cleaners=['arabic_cleaners'],
         ################################
         # Audio Parameters             #
         ################################
-        max_wav_value=32768.0,
+        max_wav_value=1.0,   # this is set to one as I am using librosa to resample audio signal which produces a series (numpy array with type float32 (max amplitude of 1) as oposed to scipy in original ljspeech which produces a series of type int16 
         sampling_rate=22050,
         filter_length=1024,
         hop_length=256,
@@ -81,7 +80,7 @@ def create_hparams(hparams_string=None, verbose=False):
         learning_rate=1e-3,
         weight_decay=1e-6,
         grad_clip_thresh=1.0,
-        batch_size=64,
+        batch_size=8,
         mask_padding=True  # set model's padded outputs to padded values
     )
 

@@ -93,7 +93,8 @@ def warm_start_model(checkpoint_path, model, ignore_layers):
         dummy_dict.update(model_dict)
         model_dict = dummy_dict
     model.load_state_dict(model_dict)
-    return model
+    iteration = checkpoint_dict['iteration'] if 'iteration' in checkpoint_dict.keys() else 0
+    return model, iteration
 
 
 def load_checkpoint(checkpoint_path, model, optimizer):
@@ -142,8 +143,8 @@ def validate(model, criterion, valset, iteration, batch_size, n_gpus,
 
     model.train()
     if rank == 0:
-        print("Validation loss {}: {:9f}  ".format(iteration, val_loss))
-        logger.log_validation(val_loss, model, y, y_pred, iteration)
+        print("Validation loss {}: {:9f}  ".format(iteration, reduced_val_loss))
+        logger.log_validation(reduced_val_loss, model, y, y_pred, iteration)
 
 
 def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
@@ -159,17 +160,21 @@ def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
     rank (int): rank of current gpu
     hparams (object): comma separated list of "name=value" pairs.
     """
+    # not using distributed run
     if hparams.distributed_run:
         init_distributed(hparams, n_gpus, rank, group_name)
-
+    
+    # this is to get deterministic results
     torch.manual_seed(hparams.seed)
     torch.cuda.manual_seed(hparams.seed)
 
+    # loading model
     model = load_model(hparams)
     learning_rate = hparams.learning_rate
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate,
                                  weight_decay=hparams.weight_decay)
-
+    
+    # not using this mode at the moment
     if hparams.fp16_run:
         from apex import amp
         model, optimizer = amp.initialize(
@@ -178,11 +183,14 @@ def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
     if hparams.distributed_run:
         model = apply_gradient_allreduce(model)
 
+    # to eveluate loss
     criterion = Tacotron2Loss()
 
+    # preparing directories
     logger = prepare_directories_and_logger(
         output_directory, log_directory, rank)
-
+    
+    # load data sets -- just as datafeeder from previous repos
     train_loader, valset, collate_fn = prepare_dataloaders(hparams)
 
     # Load checkpoint if one exists
@@ -190,8 +198,9 @@ def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
     epoch_offset = 0
     if checkpoint_path is not None:
         if warm_start:
-            model = warm_start_model(
+            model, iteration = warm_start_model(
                 checkpoint_path, model, hparams.ignore_layers)
+            iteration += 1  # next iteration is iteration + 1
         else:
             model, optimizer, _learning_rate, iteration = load_checkpoint(
                 checkpoint_path, model, optimizer)
@@ -205,6 +214,7 @@ def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
     # ================ MAIN TRAINNIG LOOP! ===================
     for epoch in range(epoch_offset, hparams.epochs):
         print("Epoch: {}".format(epoch))
+        # getting each patch --> 2 tensors one for word and one for melspectrogrm 
         for i, batch in enumerate(train_loader):
             start = time.perf_counter()
             for param_group in optimizer.param_groups:

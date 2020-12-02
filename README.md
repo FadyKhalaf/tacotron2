@@ -6,12 +6,11 @@ Wavenet On Mel Spectrogram Predictions](https://arxiv.org/pdf/1712.05884.pdf).
 This work is based on the work described [A Transfer Learning End-to-End Arabic Text-To-Speech (TTS) Deep Architecture](https://link.springer.com/chapter/10.1007/978-3-030-58309-5_22)
 
 This implementation includes **distributed** and **automatic mixed precision** support
-and uses the [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/).
+and uses [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/).
 
 Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and [AMP].
 
 ![Alignment, Predicted Mel Spectrogram, Target Mel Spectrogram](tensorboard.png)
-
 
 ## Pre-requisites
 1. NVIDIA GPU + CUDA cuDNN
@@ -19,7 +18,7 @@ Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and 
 ## Setup
 1. Clone this repo: `https://github.com/FadyKhalaf/tacotron2.git`
 2. CD into this repo: `cd tacotron2`
-3. Download and extract the [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/)
+3. Download and extract [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/)
 4. place the data set in a folder called `arabic_dataset_folder`
 5. Run the preprocessing script `python preprocess_data.py`. 
 6. Install [PyTorch]
@@ -35,7 +34,7 @@ Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and 
 Training using a pre-trained model can lead to faster convergence  
 By default, the dataset dependent text embedding layers are [ignored]
 
-1. Download our published [Tacotron 2] model
+1. Download my pretrained [Tacotron 2] model
 2. `python train.py --output_directory=outdir --log_directory=logdir -c tacotron2_statedict.pt --warm_start`
 
 ## Multi-GPU (distributed) and Automatic Mixed Precision Training

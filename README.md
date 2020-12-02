@@ -1,15 +1,14 @@
-# Tacotron 2 (without wavenet)
+# Arabic Text-to-Speech using transfer learning from Tacotron 2 
 
 PyTorch implementation of [Natural TTS Synthesis By Conditioning
 Wavenet On Mel Spectrogram Predictions](https://arxiv.org/pdf/1712.05884.pdf). 
 
+This work is based on the work described [A Transfer Learning End-to-End Arabic Text-To-Speech (TTS) Deep Architecture](https://link.springer.com/chapter/10.1007/978-3-030-58309-5_22)
+
 This implementation includes **distributed** and **automatic mixed precision** support
-and uses the [LJSpeech dataset](https://keithito.com/LJ-Speech-Dataset/).
+and uses the [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/).
 
 Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and [AMP].
-
-Visit our [website] for audio samples using our published [Tacotron 2] and
-[WaveGlow] models.
 
 ![Alignment, Predicted Mel Spectrogram, Target Mel Spectrogram](tensorboard.png)
 
@@ -18,13 +17,12 @@ Visit our [website] for audio samples using our published [Tacotron 2] and
 1. NVIDIA GPU + CUDA cuDNN
 
 ## Setup
-1. Download and extract the [LJ Speech dataset](https://keithito.com/LJ-Speech-Dataset/)
-2. Clone this repo: `git clone https://github.com/NVIDIA/tacotron2.git`
-3. CD into this repo: `cd tacotron2`
-4. Initialize submodule: `git submodule init; git submodule update`
-5. Update .wav paths: `sed -i -- 's,DUMMY,ljs_dataset_folder/wavs,g' filelists/*.txt`
-    - Alternatively, set `load_mel_from_disk=True` in `hparams.py` and update mel-spectrogram paths 
-6. Install [PyTorch 1.0]
+1. Clone this repo: `https://github.com/FadyKhalaf/tacotron2.git`
+2. CD into this repo: `cd tacotron2`
+3. Download and extract the [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/)
+4. place the data set in a folder called `arabic_dataset_folder`
+5. Run the preprocessing script `python preprocess_data.py`. 
+6. Install [PyTorch]
 7. Install [Apex]
 8. Install python requirements or build docker image 
     - Install python requirements: `pip install -r requirements.txt`

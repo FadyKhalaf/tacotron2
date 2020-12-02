@@ -5,6 +5,8 @@ Wavenet On Mel Spectrogram Predictions](https://arxiv.org/pdf/1712.05884.pdf).
 
 This work is based on the work described [A Transfer Learning End-to-End Arabic Text-To-Speech (TTS) Deep Architecture](https://link.springer.com/chapter/10.1007/978-3-030-58309-5_22)
 
+This word uses almost the same code as [Nivedia Tacotron 2](https://github.com/NVIDIA/tacotron2)[Keith
+Ito](https://github.com/keithito/tacotron/)
 This implementation includes **distributed** and **automatic mixed precision** support
 and uses [Nawar Halabi's dataset](http://en.arabicspeechcorpus.com/).
 
@@ -58,9 +60,9 @@ Generative Network for Speech Synthesis
 WaveNet.
 
 ## Acknowledgements
-This implementation uses code from the following repos: [Keith
+This implementation uses code from the following repos: [Nivedia Tacotron 2](https://github.com/NVIDIA/tacotron2)[Keith
 Ito](https://github.com/keithito/tacotron/), [Prem
-Seetharaman](https://github.com/pseeth/pytorch-stft) as described in our code.
+Seetharaman](https://github.com/pseeth/pytorch-stft) as described in my code.
 
 We are inspired by [Ryuchi Yamamoto's](https://github.com/r9y9/tacotron_pytorch)
 Tacotron PyTorch implementation.

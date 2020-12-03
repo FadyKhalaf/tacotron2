@@ -29,7 +29,7 @@ Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and 
     - Install python requirements: `pip install -r requirements.txt`
 
 ## Training from the English model [As published by NVIDIA/tacotron2](https://drive.google.com/file/d/1c5ZTuT7J08wLUoVZ2KkUs_VdZuJ86ZqA/view) 
-1. `python train.py --output_directory=outdir --log_directory=logdir`
+1. `python train.py --output_directory=outdir --log_directory=logdir -c tacotron2_statedict.pt --warm_start`
 2. (OPTIONAL) `tensorboard --logdir=outdir/logdir`
 
 ## Training using a pre-trained model
@@ -37,7 +37,7 @@ Training using a pre-trained model can lead to faster convergence
 By default, the dataset dependent text embedding layers are [ignored]
 
 1. Download my pretrained [Tacotron 2] model
-2. `python train.py --output_directory=outdir --log_directory=logdir -c tacotron2_statedict.pt --warm_start`
+2. `python train.py --output_directory=outdir --log_directory=logdir -c checkpoint_55000 --warm_start`
 
 ## Multi-GPU (distributed) and Automatic Mixed Precision Training
 1. `python -m multiproc train.py --output_directory=outdir --log_directory=logdir --hparams=distributed_run=True,fp16_run=True`

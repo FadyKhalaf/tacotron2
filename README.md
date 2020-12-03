@@ -28,7 +28,7 @@ Distributed and Automatic Mixed Precision support relies on NVIDIA's [Apex] and 
 8. Install python requirements or build docker image 
     - Install python requirements: `pip install -r requirements.txt`
 
-## Training
+## Training from the English model [As published by NVIDIA/tacotron2](https://drive.google.com/file/d/1c5ZTuT7J08wLUoVZ2KkUs_VdZuJ86ZqA/view) 
 1. `python train.py --output_directory=outdir --log_directory=logdir`
 2. (OPTIONAL) `tensorboard --logdir=outdir/logdir`
 

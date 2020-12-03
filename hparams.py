@@ -31,7 +31,7 @@ def create_hparams(hparams_string=None, verbose=False):
         ################################
         # Audio Parameters             #
         ################################
-        max_wav_value=1.0,   # this is set to one as I am using librosa to resample audio signal which produces a series (numpy array with type float32 (max amplitude of 1) as oposed to scipy in original ljspeech which produces a series of type int16 
+        max_wav_value=1.0,  
         sampling_rate=22050,
         filter_length=1024,
         hop_length=256,
